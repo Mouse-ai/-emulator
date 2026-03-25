@@ -62,6 +62,7 @@ class PumpAggregate:
     timestamp: str = ""
     health_score: float = 100.0
     bearing_wear_level: float = 0.0
+    start_time: datetime = None
 
     def update_timestamp(self):
         self.timestamp = datetime.now().isoformat()
@@ -122,6 +123,7 @@ class MainPumpStationEmulator:
 
         agg.status = AggregateStatus.RUNNING_MAIN
         agg.starts_count += 1
+        agg.start_time = datetime.now()
         print(f"  - Пуск двигателя...")
         time.sleep(1.0)
 
@@ -255,11 +257,15 @@ class MainPumpStationEmulator:
         electrical_power = agg.current * agg.voltage / 1000
         efficiency = (hydraulic_power / electrical_power * 100) if electrical_power > 0 else 0
 
+        elapsed_hours = 0.0
+        if agg.start_time and agg.status in [AggregateStatus.RUNNING_MAIN, AggregateStatus.RUNNING_BOOST]:
+            elapsed_hours = (datetime.now() - agg.start_time).total_seconds() / 3600
+
         return {
             "electrical_power_kw": round(electrical_power, 2),
             "hydraulic_power_kw": round(hydraulic_power, 2),
             "efficiency_percent": round(efficiency, 2),
-            "energy_consumed_kwh": round(agg.operating_hours * electrical_power, 2),
+            "energy_consumed_kwh": round(electrical_power * elapsed_hours, 2),
         }
 
     def predict_failure(self, aggregate_id: str) -> Dict:
@@ -495,12 +501,18 @@ def demo():
     print(f"  Потреблено энергии: {energy['energy_consumed_kwh']} кВт·ч")
     time.sleep(1)
 
-    print(f"\n\n{Colors.BOLD}4. Отчет по насосной станции:{Colors.RESET}")
+    print(f"\n\n{Colors.BOLD}4. Генерация отчёта по станции{Colors.RESET}")
     print("-" * 40)
     time.sleep(0.5)
     report = station.generate_station_report()
-    print(json.dumps(report, indent=2, ensure_ascii=False, default=str))
-
+    
+    print(f"\n{Colors.BLUE}Краткая сводка:{Colors.RESET}")
+    print(f"  Работает агрегатов: {report['summary']['total_running']}")
+    print(f"  Остановлено: {report['summary']['total_stopped']}")
+    print(f"  Всего предупреждений: {report['summary']['total_alerts']}")
+    print(f"  Общий расход: {report['summary']['total_flow']:.3f} м³/с")
+    print(f"  Общая мощность: {report['summary']['total_power']:.1f} кВт")
+    
     station.save_report_to_file(report)
     time.sleep(1)
 
