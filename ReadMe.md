@@ -42,12 +42,13 @@ pip install -r requirements.txt
 python main.py
 ```
 ### Структура проекта
-msos/
+```text
 ├── main.py                    # Основной код эмулятора
 ├── requirements.txt           # Зависимости
 ├── README.md                  # Документация
 ├── pump_station_report.json   # Генерируемый отчёт
 └── .gitignore                 # Игнорируемые файлы
+```
 ### Пример вывода
 ```bash
 ======================================================================
