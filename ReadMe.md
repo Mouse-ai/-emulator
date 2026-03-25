@@ -43,11 +43,16 @@ python main.py
 ```
 ### Структура проекта
 ```text
-├── main.py                    # Основной код эмулятора
-├── requirements.txt           # Зависимости
-├── README.md                  # Документация
-├── pump_station_report.json   # Генерируемый отчёт
-└── .gitignore                 # Игнорируемые файлы
+├── main.py # Основной код эмулятора
+├── app.py # Flask веб-сервер
+├── templates/
+│ └── index.html # Веб-интерфейс
+├── static/
+│ ├── style.css # Стили
+│ └── script.js # JavaScript для графиков
+├── requirements.txt # Зависимости
+├── README.md # Документация
+└── pump_station_report.json # Генерируемый отчёт
 ```
 ### Пример вывода
 ```bash
