@@ -43,7 +43,6 @@ python main.py
 ```
 ### Структура проекта
 ```txt
-msos/
 ├── main.py                    # Основной код эмулятора
 ├── requirements.txt           # Зависимости
 ├── README.md                  # Документация
