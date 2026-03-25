@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>МНС - Мониторинг насосных агрегатов</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>🏭 Магистральная Насосная Станция</h1>
+        <p>Мониторинг агрегатов МНА-21, МНА-22, МНА-23, МНА-24</p>
+    </header>
+
+    <div class="aggregates-grid" id="aggregates"></div>
+
+    <div class="controls">
+        <h2>Управление</h2>
+        <div class="control-buttons">
+            <button onclick="startAll()" class="btn btn-success">Запустить все</button>
+            <button onclick="stopAll()" class="btn btn-danger">Остановить все</button>
+            <button onclick="simulateAnomaly()" class="btn btn-warning">Тест аномалии</button>
+        </div>
+    </div>
+
+    <div class="charts">
+        <h2>Графики в реальном времени</h2>
+        <div class="chart-container">
+            <div style="height: 300px;">
+                <canvas id="tempChart"></canvas>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="vibrationChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
